@@ -1,0 +1,36 @@
+@import "materialize";
+
+body {
+  @extend .grey;
+  @extend .lighten-3;
+}
+
+.theme_bg {
+  @extend .light-green;
+  @extend .darken-2;
+}
+
+p.big {
+  font-size: 24px;
+}
+
+.signed {
+  &:before {
+    content: "~"
+  }
+  text-align: right;
+  font: "Pacifico" serif;
+  font-size: 30px;
+}
+
+.error {
+  @extend .red-text;
+}
+
+table.highlight > tbody > tr:hover {
+  background-color: #e0e0e0;
+}
+
+tr.deleted > td {
+  @extend .grey-text;
+}

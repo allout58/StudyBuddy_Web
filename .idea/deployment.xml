@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="Clemson CS Lab">
+    <serverData>
+      <paths name="Clemson CS Lab">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/4820/projects/proj" local="$PROJECT_DIR$" web="4820/projects/proj" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
