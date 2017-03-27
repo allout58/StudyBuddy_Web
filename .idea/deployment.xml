@@ -5,7 +5,7 @@
       <paths name="Clemson CS Lab">
         <serverdata>
           <mappings>
-            <mapping deploy="/4820/projects/proj" local="$PROJECT_DIR$" web="4820/projects/proj" />
+            <mapping deploy="4820/projects/proj" local="$PROJECT_DIR$" web="/4820/projects/proj" />
           </mappings>
         </serverdata>
       </paths>
