@@ -8,10 +8,9 @@ require_once '../common.inc';
 $uid = getFirebaseUIDFromJWT($_POST['jwt']);
 
 if ($uid != null) {
-    $prep_sel_sub = $dbo->prepare("SELECT subID, name FROM SubLocations WHERE locationID=:lid");
-    $prep_sel_sub->bindParam(":lid", $locID);
-
     $out = array();
+    $prep_sel_sub = $dbo->prepare("SELECT subID, name, locationID FROM SubLocations WHERE locationID=:lid");
+    $prep_sel_sub->bindParam(":lid", $locID);
 
     $sel_locs = $dbo->query("SELECT locationID, name, longitude, latitude, radius FROM Locations");
     $locs = array();
@@ -21,19 +20,15 @@ if ($uid != null) {
         while (($r = $prep_sel_sub->fetch(PDO::FETCH_ASSOC))) {
             array_push($row['sublocs'], $r);
         }
+        array_push($locs, $row);
     }
 
-    $friends = array();
-    $friends['connected'] = array();
-    $friends['my_requests'] = array();
-    $friends['their_requests'] = array();
-
-
+    $friends = getFriendsForUser($uid, $dbo);
 
     $out['locations'] = $locs;
     $out['friends'] = $friends;
     echo json_encode($out);
 } else {
     http_response_code(401);
-    echo "{'error':'Bad token'}";
+    die("{'error':'Bad token'}");
 }

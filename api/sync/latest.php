@@ -1,22 +1,21 @@
 <?php
-
 require_once '../common.inc';
 
-// TODO: Get rid of the $method and just replace it in all instances
-$method = $_GET;
+$uid = getFirebaseUIDFromJWT($_POST['jwt']);
+if ($uid != "") {
+    $ts = "";
+    $lastTimestamp = "";
+    $prep = $dbo->prepare("SELECT UTC_TIMESTAMP(last_update) FROM Locations ORDER BY last_update ASC LIMIT 1");
+    $prep->bindColumn(1, $lastTimestamp);
+    $prep->execute();
+    $prep->fetch();
+    $prep2 = $dbo->prepare("SELECT UTC_TIMESTAMP(last_update) FROM SubLocations ORDER BY last_update ASC LIMIT 1");
+    $prep2->bindColumn(1, $ts);
+    $prep2->execute();
+    $prep2->fetch();
+    echo json_encode(array('locations' => $lastTimestamp, 'sublocations' => $ts));
 
-$uid = $method['userid'];
-$lastTimestamp = "";
-$prep = $dbo->prepare("SELECT c.last_update FROM Cars AS c INNER JOIN UsersCars AS uc ON c.carID = uc.carID WHERE uc.userID=:userid ORDER BY c.last_update ASC LIMIT 1");
-$prep->bindParam(":userid", $uid);
-$prep->bindColumn(1, $lastTimestamp);
-$prep->execute();
-$prep->fetch();
-if ($prep->rowCount() == 1) {
-    $out = array();
-    $out['lastTimestamp'] = $lastTimestamp;
-    echo json_encode($out);
-}
-else {
-    echo '{"error": "No cars for this user."}';
+} else {
+    http_response_code(401);
+    die("{'error':'Bad token'}");
 }
