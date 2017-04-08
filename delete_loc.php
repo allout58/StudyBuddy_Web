@@ -1,5 +1,4 @@
 <?php
-require_once "inc/login.inc";
 require_once "inc/mysql.inc";
 
 if (isset($_GET['confirm']) && $_GET['confirm'] == "1") {
@@ -27,9 +26,11 @@ $row = $sel_prep->fetch(PDO::FETCH_ASSOC);
 <?php require_once "inc/menu.inc"; ?>
 <div class="container">
     <h3>Confirm Delete</h3>
-    <p>Are you sure you want to send your <strong><?php echo $row['year'] . " " .$row['make'] . " " . $row['model'];?></strong> to the trashcan?</p>
-    <a href="delete.php?id=<?php echo $_GET['id'];?>&confirm=1" class="waves-effect waves-light btn red"><i class="material-icons right">delete</i>Delete</a>
-    <a href="view.php" class="waves-effect waves-light btn">Cancel</a>
+    <p>Are you sure you want to send your
+        <strong><?php echo $row['year'] . " " . $row['make'] . " " . $row['model']; ?></strong> to the trashcan?</p>
+    <a href="delete.php?id=<?php echo $_GET['id']; ?>&confirm=1" class="waves-effect waves-light btn red"><i
+                class="material-icons right">delete</i>Delete</a>
+    <a href="index.php" class="waves-effect waves-light btn">Cancel</a>
 </div>
 <?php require_once "inc/js.inc"; ?>
 </body>

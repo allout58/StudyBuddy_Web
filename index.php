@@ -1,58 +1,57 @@
 <?php
-require_once "inc/login.inc";
 require_once "inc/mysql.inc";
-if ($_SESSION['loggedIn']) {
-    // Go to the view page if we
-    header("Location: view.php");
-    die();
-}
-if (isset($_POST['username'])) {
-    $uname = $_POST['username'];
-    $passwd = $_POST['password'];
-    $userID = "";
-    $prep = $dbo->prepare("SELECT userID FROM Users WHERE uname=:user AND password=SHA2(:pwd, 256)");
-    $prep->bindParam(":user", $uname);
-    $prep->bindParam(":pwd", $passwd);
-    $prep->bindColumn(1, $userID);
-    $prep->execute();
-    $prep->fetch();
-    if ($prep->rowCount() == 1) {
-        $_SESSION['loggedIn'] = true;
-        $_SESSION['username'] = $uname;
-        $_SESSION['userid'] = $userID;
-        header("Location: view.php");
-    } else {
-        $errors = "Invalid username or password.";
-    }
+require_once "inc/functions.inc";
+
+$row = array();
+
+$sel_res = $dbo->query("SELECT locationID AS id, name, longitude, latitude, radius FROM Locations");
+
+$out = array();
+while (($row = $sel_res->fetch(PDO::FETCH_ASSOC))) {
+    array_push($out, $row);
 }
 ?>
 <html>
 <head>
-    <title>MyGarage - Login</title>
+    <title>StudyBuddy - Locations</title>
     <?php require_once "inc/css.inc"; ?>
 </head>
 <body>
 <?php require_once "inc/menu.inc"; ?>
 <div class="container">
-    <h3>Login</h3>
-    <p>Login to access your garage!</p>
-    <form method="post">
-        <?php if (isset($errors)): ?>
-            <p class="error"><?php echo $errors; ?></p>
-        <?php endif; ?>
-        <div class="input-field">
-            <input id="username" name="username" type="text" class="validate"
-                   required <?php if (isset($_POST['username'])) echo "value='{$_POST['username']}'"; ?>>
-            <label for="username">Username</label>
-        </div>
-        <div class="input-field">
-            <input id="password" name="password" type="password" class="validate" required>
-            <label for="password">Password</label>
-        </div>
-        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
-            <i class="material-icons right">send</i>
-        </button>
-    </form>
+    <h3>Locations</h3>
+    <a href="add_loc.php" class="waves-light waves-effect btn"><i class="material-icons right">add</i>Add</a>
+    <p>Edit a location to view and edit its sublocations.</p>
+    <table class="highlight">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Longitude</th>
+            <th>Latitude</th>
+            <th>Radius</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        foreach ($out as $r) { ?>
+            <tr>
+                <td><?php echo $r['name']; ?></td>
+                <td><?php echo $r['longitude']; ?></td>
+                <td><?php echo $r['latitude']; ?></td>
+                <td><?php echo $r['radius']; ?></td>
+                <td>
+                    <?php
+                    echo "<a href='edit_loc.php?id=${r['id']}'><i class='material-icons'>edit</i></a>";
+                    echo "<a href='delete_loc.php?id=${r['id']}'><i class='red-text material-icons'>delete</i></a></td>";
+                    ?>
+                </td>
+            </tr>
+            <?php
+        }
+        ?>
+        </tbody>
+    </table>
 </div>
 <?php require_once "inc/js.inc"; ?>
 </body>

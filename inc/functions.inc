@@ -1,6 +1,6 @@
 <?php
 
-function getFriendsForUser($uid, $dbo)
+function getFriendsForUser($uid, PDO $dbo)
 {
     $friends = array();
     $friends['connected'] = array();
@@ -18,7 +18,6 @@ function getFriendsForUser($uid, $dbo)
             unset($row['subID']);
             unset($row['blurb']);
             unset($row['endTime']);
-            unset($row['imageURL']);
             array_push($friends['their_requests'], $row);
         }
     }
@@ -34,7 +33,6 @@ function getFriendsForUser($uid, $dbo)
             unset($row['subID']);
             unset($row['blurb']);
             unset($row['endTime']);
-            unset($row['imageURL']);
             array_push($friends['my_requests'], $row);
         }
     }

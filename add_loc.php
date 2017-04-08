@@ -1,5 +1,4 @@
 <?php
-require_once "inc/login.inc";
 require_once "inc/mysql.inc";
 require_once "inc/functions.inc";
 
