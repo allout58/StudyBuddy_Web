@@ -1,7 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jthollo
- * Date: 3/30/2017
- * Time: 7:41 PM
- */
+require_once '../common.inc';
+
+$uid = getFirebaseUIDFromJWT($_POST['jwt']);
+
+if ($uid != null) {
+    $sel_prep = $dbo->prepare("SELECT firebase_uid, realName, imageURL FROM Users WHERE realName LIKE :name");
+    $sel_prep->bindValue(":name", "%" . implode("%", explode(" ", $_POST['search'])) . "%");
+    $sel_prep->execute();
+    $res = array();
+    while (($row = $sel_prep->fetch())) {
+        array_push($res, $row);
+    }
+    $out = array("results" => $res, "status" => "success");
+    echo json_encode($out);
+} else {
+    http_response_code(401);
+    die("{'error':'Bad token'}");
+}
