@@ -64,7 +64,7 @@ $sub_sel_prep->execute();
         <div class="row">
             <div class="input-field col m12 l6">
                 <input id="radius" name="radius" type="number" class="validate"
-                       value="<?php echo $row['radius']; ?>">
+                       required value="<?php echo $row['radius']; ?>">
                 <label for="radius">Radius</label>
             </div>
         </div>
@@ -156,7 +156,7 @@ $sub_sel_prep->execute();
                 doEdit($(e.target).parents("li").data("id"), e.target);
             }
         });
-            }
+    }
 
     $(document).ready(function () {
         itemTpl = $('script[data-template="listItem"]').text().split(/\$\{(.+?)\}/g);
@@ -212,7 +212,6 @@ $sub_sel_prep->execute();
         li.find(".edit").show();
     }
     function startDelete(id) {
-        console.log("Starting delete");
         //Modal to confirm delete
         var li = $("#sub-" + id);
         var name = li.data("name");
