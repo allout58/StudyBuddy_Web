@@ -7,7 +7,7 @@
             <li class="waves-effect waves-light"><a href="index.php">View Locations</a></li>
         </ul>
         <ul id="nav-mobile" class="side-nav">
-            <li><a href="view.php">View Your Garage</a></li>
+            <li><a href="index.php">View Locations</a></li>
         </ul>
     </div>
 </nav>

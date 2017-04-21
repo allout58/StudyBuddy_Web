@@ -4,10 +4,9 @@ require_once '../common.inc';
 $uid = getFirebaseUIDFromJWT($_POST['jwt']);
 
 if ($uid != null) {
-    $upd_prep = $dbo->prepare("UPDATE Users SET subID=:sid, blurb=:blurb WHERE firebase_uid=:fid");
+    $upd_prep = $dbo->prepare("UPDATE Users SET endTime=:endTime WHERE firebase_uid=:fid");
     $upd_prep->bindValue(":fid", $uid);
-    $upd_prep->bindValue(":sid", $_POST['sublocationID']);
-    $upd_prep->bindValue(":blurb", $_POST['other']);
+    $upd_prep->bindValue(":endTime", $_POST['endTime']);
     $upd_prep->execute();
     $out = array("status" => "success");
     echo json_encode($out);

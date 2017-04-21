@@ -7,7 +7,7 @@ function getFriendsForUser($uid, PDO $dbo)
     $friends['my_requests'] = array();
     $friends['their_requests'] = array();
 
-    $prep_sel_friends1 = $dbo->prepare("SELECT realName, firebase_uid, locationID, subID, blurb, UNIX_TIMESTAMP(endTime) AS endTime, imageURL, confirmed FROM Users INNER JOIN Friends ON Users.firebase_uid = Friends.requester WHERE Friends.requestee=:uid");
+    $prep_sel_friends1 = $dbo->prepare("SELECT realName, firebase_uid, locationID, subID, blurb, endTime, imageURL, confirmed FROM Users INNER JOIN Friends ON Users.firebase_uid = Friends.requester WHERE Friends.requestee=:uid");
     $prep_sel_friends1->bindValue(":uid", $uid);
     $prep_sel_friends1->execute();
     while (($row = $prep_sel_friends1->fetch(PDO::FETCH_ASSOC))) {
@@ -22,7 +22,7 @@ function getFriendsForUser($uid, PDO $dbo)
         }
     }
 
-    $prep_sel_friends2 = $dbo->prepare("SELECT realName, firebase_uid, locationID, subID, blurb, UNIX_TIMESTAMP(endTime) AS endTime, imageURL, confirmed FROM Users INNER JOIN Friends ON Users.firebase_uid = Friends.requestee WHERE Friends.requester=:uid");
+    $prep_sel_friends2 = $dbo->prepare("SELECT realName, firebase_uid, locationID, subID, blurb, endTime, imageURL, confirmed FROM Users INNER JOIN Friends ON Users.firebase_uid = Friends.requestee WHERE Friends.requester=:uid");
     $prep_sel_friends2->bindValue(":uid", $uid);
     $prep_sel_friends2->execute();
     while (($row = $prep_sel_friends2->fetch(PDO::FETCH_ASSOC))) {
