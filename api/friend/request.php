@@ -1,6 +1,8 @@
 <?php
 require_once '../common.inc';
 
+//ini_set('display_errors', 'On');
+
 $uid = getFirebaseUIDFromJWT($_POST['jwt']);
 
 if ($uid != null) {
@@ -22,7 +24,15 @@ if ($uid != null) {
         $ins_prep->bindValue(":fb_uid", $uid);
         $ins_prep->bindValue(":o_uid", $_POST['otherID']);
         $ins_prep->execute();
-        // TODO: Notify requestee of new friend request
+        // Send
+        $sel_fcm_prep = $dbo->prepare("SELECT fcm_regID FROM Users WHERE firebase_uid=:id");
+        $sel_fcm_prep->bindValue(":id", $_POST['otherID']);
+        $sel_fcm_prep->bindColumn(1, $regID);
+        $sel_fcm_prep->execute();
+        $sel_fcm_prep->fetch();
+        $resp = fcm_sendSingle(array("action" => "request", "req_id" => $uid), $regID);
+        $file = fopen("./log.txt", "a");
+        fwrite($file, json_encode($resp));
     }
     echo "{'status':'success'}";
 } else {
