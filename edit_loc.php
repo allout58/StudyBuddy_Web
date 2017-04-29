@@ -52,12 +52,12 @@ $sub_sel_prep->execute();
         <div class="row">
             <div class="input-field col m12 l6">
                 <input id="longitude" name="longitude" type="number" class="validate"
-                       required value="<?php echo $row['longitude']; ?>">
+                       required value="<?php echo $row['longitude']; ?>" step="any">
                 <label for="longitude">Longitude</label>
             </div>
             <div class="input-field col m12 l6">
                 <input id="latitude" name="latitude" type="number" class="validate"
-                       required value="<?php echo $row['latitude']; ?>">
+                       required value="<?php echo $row['latitude']; ?>" step="any">
                 <label for="latitude">Latitude</label>
             </div>
         </div>

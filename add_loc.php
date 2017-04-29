@@ -2,11 +2,16 @@
 require_once "inc/mysql.inc";
 require_once "inc/functions.inc";
 
-if (isset($_POST['id'])) {
+ini_set('display_errors', 'On');
+
+if (isset($_POST['name'])) {
+
+    $dbo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
     $dbo->beginTransaction();
 
     $upd_prep = $dbo->prepare("INSERT INTO Locations (name,longitude, latitude, radius) VALUES (:name, :long, :lat, :rad)");
-    $upd_prep->bindValue(":name", $_POST['make']);
+    $upd_prep->bindValue(":name", $_POST['name']);
     $upd_prep->bindValue(":long", $_POST['longitude']);
     $upd_prep->bindValue(":lat", $_POST['latitude']);
     $upd_prep->bindValue(":rad", $_POST['radius']);
@@ -20,7 +25,7 @@ if (isset($_POST['id'])) {
 //    $uc_prep->execute();
 
     $dbo->commit();
-    header("Location: edit.php?id=$locID");
+    header("Location: edit_loc.php?id=$locID");
     die();
 }
 
@@ -43,11 +48,11 @@ if (isset($_POST['id'])) {
         </div>
         <div class="row">
             <div class="input-field col m12 l6">
-                <input id="longitude" name="longitude" type="number" class="validate" required>
+                <input id="longitude" name="longitude" type="number" class="validate" required step="any">
                 <label for="longitude">Longitude</label>
             </div>
             <div class="input-field col m12 l6">
-                <input id="latitude" name="latitude" type="number" class="validate" required>
+                <input id="latitude" name="latitude" type="number" class="validate" required step="any">
                 <label for="latitude">Latitude</label>
             </div>
         </div>
@@ -63,23 +68,23 @@ if (isset($_POST['id'])) {
         </button>
     </form>
     <hr>
-<!--    <div>-->
-<!--        <h4>Sublocations</h4>-->
-<!--        <div class="row">-->
-<!--            <div class="input-field col m12 l6">-->
-<!--                <input id="sub-add-name" type="text">-->
-<!--                <label for="sub-add-name">Name</label>-->
-<!---->
-<!--            </div>-->
-<!--            <div class="col m12 l6">-->
-<!--                <button type="button" class="btn waves-effect waves-light" onclick="doAdd()"><i-->
-<!--                            class="material-icons right">add</i>Add-->
-<!--                </button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <ul class="collection" id="sublocs">-->
-<!--        </ul>-->
-<!--    </div>-->
+    <!--    <div>-->
+    <!--        <h4>Sublocations</h4>-->
+    <!--        <div class="row">-->
+    <!--            <div class="input-field col m12 l6">-->
+    <!--                <input id="sub-add-name" type="text">-->
+    <!--                <label for="sub-add-name">Name</label>-->
+    <!---->
+    <!--            </div>-->
+    <!--            <div class="col m12 l6">-->
+    <!--                <button type="button" class="btn waves-effect waves-light" onclick="doAdd()"><i-->
+    <!--                            class="material-icons right">add</i>Add-->
+    <!--                </button>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--        <ul class="collection" id="sublocs">-->
+    <!--        </ul>-->
+    <!--    </div>-->
 </div>
 <div id="delModal" class="modal" data-id="-1">
     <div class="modal-content">
