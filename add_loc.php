@@ -1,8 +1,8 @@
 <?php
 require_once "inc/mysql.inc";
 require_once "inc/functions.inc";
-
-ini_set('display_errors', 'On');
+require_once "vendor/autoload.php";
+require_once "inc/firebase_cm.inc";
 
 if (isset($_POST['name'])) {
 
@@ -25,6 +25,14 @@ if (isset($_POST['name'])) {
 //    $uc_prep->execute();
 
     $dbo->commit();
+
+    $sel = $dbo->query("SELECT fcm_regID FROM Users");
+    $regids = array();
+    while (($row = $sel->fetch())) {
+        array_push($regids, $row[0]);
+    }
+    fcm_sendMulti(array("action" => "upd_locs"), $regids, "locs");
+
     header("Location: edit_loc.php?id=$locID");
     die();
 }

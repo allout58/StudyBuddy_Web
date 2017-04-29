@@ -1,6 +1,8 @@
 <?php
 require_once "inc/mysql.inc";
 require_once "inc/functions.inc";
+require_once "vendor/autoload.php";
+require_once "inc/firebase_cm.inc";
 
 if (isset($_POST['id'])) {
     $upd_prep = $dbo->prepare("UPDATE Locations SET name=:name, longitude=:longitude, latitude=:latitude, radius=:radius WHERE locationID=:id");
@@ -10,6 +12,14 @@ if (isset($_POST['id'])) {
     $upd_prep->bindValue(":latitude", $_POST['latitude']);
     $upd_prep->bindValue(":radius", $_POST['radius']);
     $upd_prep->execute();
+
+    $sel = $dbo->query("SELECT fcm_regID FROM Users");
+    $regids = array();
+    while (($row = $sel->fetch())) {
+        array_push($regids, $row[0]);
+    }
+    fcm_sendMulti(array("action" => "upd_locs"), $regids, "locs");
+
     $updSuccess = true;
 }
 

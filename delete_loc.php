@@ -1,5 +1,7 @@
 <?php
 require_once "inc/mysql.inc";
+require_once "vendor/autoload.php";
+require_once "inc/firebase_cm.inc";
 
 if (isset($_GET['confirm']) && $_GET['confirm'] == "1") {
     $dbo->beginTransaction();
@@ -13,6 +15,14 @@ if (isset($_GET['confirm']) && $_GET['confirm'] == "1") {
     $del_sl_prep->execute();
 
     $dbo->commit();
+
+    $sel = $dbo->query("SELECT fcm_regID FROM Users");
+    $regids = array();
+    while (($row = $sel->fetch())) {
+        array_push($regids, $row[0]);
+    }
+    fcm_sendMulti(array("action" => "upd_locs"), $regids, "locs");
+
     header("Location: index.php");
     die();
 }
